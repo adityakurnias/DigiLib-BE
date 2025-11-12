@@ -1,0 +1,16 @@
+{
+  "name": "DigiLib",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.15",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
+    "hono": "^4.10.5"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.2",
+    "drizzle-kit": "^0.31.6"
+  }
+}
