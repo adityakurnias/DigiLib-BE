@@ -27,7 +27,7 @@ export const AuthService = {
   },
 
   login: async (email: string, password: string) => {
-    const user = await db
+    const user = db
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, email))
@@ -45,6 +45,7 @@ export const AuthService = {
 
     return {
       success: true,
+      message: "User login successfully",
       token,
       user: { id: user.id, name: user.name, email: user.email },
     };

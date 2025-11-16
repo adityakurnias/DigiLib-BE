@@ -1,8 +1,12 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { mysqlTable, int, varchar, mysqlEnum} from "drizzle-orm/mysql-core";
 
-export const usersTable = sqliteTable("users", {
-  id: int().primaryKey({ autoIncrement: true }),
-  name: text({ length: 255 }).notNull(),
-  email: text({ length: 255 }).notNull().unique(),
-  password: text({ length: 255 }).notNull(),
+
+const ROLES = ['user', 'librarian'] as const;
+
+export const usersTable = mysqlTable("users", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  role: mysqlEnum("role", ROLES).default("user"),
+  password: varchar("password", { length: 255 }).notNull(),
 });
