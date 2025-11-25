@@ -15,6 +15,20 @@
       "when": 1763819998744,
       "tag": "0001_dear_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1764085203968,
+      "tag": "0002_tired_gorilla_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1764085387347,
+      "tag": "0003_glorious_havok",
+      "breakpoints": true
     }
   ]
 }
