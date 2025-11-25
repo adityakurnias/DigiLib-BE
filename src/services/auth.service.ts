@@ -1,5 +1,5 @@
 import { db } from "../databases/index";
-import { usersTable } from "../databases/schema/user";
+import { users } from "../databases/schema/users";
 import { eq } from "drizzle-orm";
 import { hashPassword, comparePassword } from "../utils/hash";
 import { generateToken } from "../utils/jwt";
@@ -8,8 +8,8 @@ export const AuthService = {
   register: async (name: string, email: string, password: string) => {
     
     const existing = await db.select()
-      .from(usersTable)
-      .where(eq(usersTable.email, email));
+      .from(users)
+      .where(eq(users.email, email));
 
     if (existing.length > 0) {
       return { error: "Email already used" };
@@ -17,7 +17,7 @@ export const AuthService = {
 
     const hashed = await hashPassword(password);
 
-    await db.insert(usersTable).values({
+    await db.insert(users).values({
       name,
       email,
       password: hashed,
@@ -27,11 +27,13 @@ export const AuthService = {
   },
 
   login: async (email: string, password: string) => {
-    const user = db
+    const result = await db
       .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, email))
-      .get();
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    const user = result[0];
 
     if (!user) return { error: "Invalid email or password" };
 
@@ -41,6 +43,8 @@ export const AuthService = {
     const token = await generateToken({
       id: user.id,
       email: user.email,
+      name: user.name,
+      role: user.role,
     });
 
     return {
