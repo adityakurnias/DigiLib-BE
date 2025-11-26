@@ -5,6 +5,8 @@ import { Hono } from "hono";
 export const borrowRoute = new Hono();
 
 borrowRoute.get("/", authMiddleware, adminMiddleware, BorrowingController.getAll);
+borrowRoute.get("/self", authMiddleware, BorrowingController.getByUser);
+
 borrowRoute.post("/:id", authMiddleware, BorrowingController.request);
 borrowRoute.post("/:id/approve", authMiddleware, adminMiddleware, BorrowingController.approve);
 borrowRoute.post("/:id/reject", authMiddleware, adminMiddleware, BorrowingController.reject);

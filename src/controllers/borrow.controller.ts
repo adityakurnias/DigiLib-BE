@@ -8,6 +8,13 @@ export const BorrowingController = {
     return c.json(result);
   },
   
+  getByUser: async (c: any) => {
+    const user = c.get("user");
+    const result = await BorrowingService.getByUser(user.id);
+
+    return c.json(result);
+  },
+  
   request: async (c: any) => {
     const user = c.get("user");
     const id = parseInt(c.req.param("id"));

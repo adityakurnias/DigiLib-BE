@@ -10,12 +10,18 @@ export const BorrowingService = {
     return { success: true, data: borrowList };
   },
   
+  getByUser: async (userId: number) => {
+    const borrowList = await db.select().from(borrowings).where(eq(borrowings.userId, userId));
+
+    return { success: true, data: borrowList };
+  },
+  
   requestBorrow: async (userId: number, bookId: number) => {
     const insert = await db.insert(borrowings).values({
       userId,
       bookId,
       status: "pending"
-    });
+    })
 
     return { success: true, message: "Borrow request sent" };
   },
