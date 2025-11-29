@@ -4,7 +4,7 @@ import { books } from "../databases/schema/books";
 import { eq, like, sql } from "drizzle-orm";
 
 export const CategoryService = {
-  async getAllCategories(page = 1, limit = 10, search = "") {
+  getAllCategories: async(page = 1, limit = 10, search = "") => {
     const offset = (page - 1) * limit;
 
     let query = db
@@ -17,7 +17,7 @@ export const CategoryService = {
       })
       .from(categories)
       .leftJoin(books, eq(categories.id, books.categoryId))
-      .$dynamic(); // 🔥 penting: ini menghapus state strict
+      .$dynamic();
     
     if (search) {
       query = query.where(like(categories.name, `%${search}%`));
@@ -40,7 +40,7 @@ export const CategoryService = {
     };
   },
 
-  async getCategoryById(id: number) {
+  getCategoryById: async(id: number) => {
     const result = await db
       .select({
         id: categories.id,
@@ -58,7 +58,7 @@ export const CategoryService = {
     return { success: true, data: result[0] };
   },
 
-  async getBooksByCategory(categoryId: number, page = 1, limit = 10) {
+  getBooksByCategory: async (categoryId: number, page = 1, limit = 10) => {
     const offset = (page - 1) * limit;
 
     const category = await db
@@ -103,7 +103,7 @@ export const CategoryService = {
     };
   },
 
-  async createCategory(name: string, description?: string) {
+  createCategory: async (name: string, description?: string) => {
     const exists = await db
       .select()
       .from(categories)
@@ -126,7 +126,7 @@ export const CategoryService = {
     };
   },
 
-  async updateCategory(id: number, name?: string, description?: string) {
+   updateCategory: async (id: number, name?: string, description?: string) => {
     const existing = await db
       .select()
       .from(categories)
@@ -155,7 +155,7 @@ export const CategoryService = {
     return { success: true, message: "Category updated successfully" };
   },
 
-  async deleteCategory(id: number) {
+  deleteCategory: async (id: number) => {
     const existing = await db
       .select()
       .from(categories)

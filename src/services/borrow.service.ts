@@ -1,6 +1,5 @@
 import { db } from "../databases";
 import { borrowings } from "../databases/schema/borrowings";
-import { books } from "../databases/schema/books";
 import { eq } from "drizzle-orm";
 
 export const BorrowingService = {

@@ -3,18 +3,21 @@ import { users } from "./users";
 import { books } from "./books";
 import { relations } from "drizzle-orm";
 
-export const statistics = mysqlTable('statistics', {
+export const readlist = mysqlTable('readlist', {
   id: int('id').primaryKey().autoincrement(),
   userId: int('user_id').notNull(),
-  totalBorrowed: int('total_borrowed').notNull().default(0),
-  totalReturned: int('total_returned').notNull().default(0),
+  bookId: int('book_id').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().onUpdateNow(),
 });
 
-export const statisticsRelations = relations(statistics, ({ one }) => ({
+export const readlistRelations = relations(readlist, ({ one }) => ({
   user: one(users, {
-    fields: [statistics.userId],
+    fields: [readlist.userId],
     references: [users.id],
   }),
+  book: one(books, {
+    fields: [readlist.userId],
+    references: [books.id]
+  })
 }));

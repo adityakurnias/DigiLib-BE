@@ -5,6 +5,8 @@ import { authRoute } from "./routes/auth.route";
 import { categoryRouter } from "./routes/category.route";
 import { bookRoutes } from "./routes/book.route";
 import { borrowRoute } from "./routes/borrow.route";
+import { statisticsRouter } from "./routes/statistics.route";
+import { libraryStatisticsRouter } from "./routes/library_statistics.route";
 
 const app = new Hono();
 
@@ -18,5 +20,8 @@ app.route("/auth", authRoute);
 app.route("/category", categoryRouter);
 app.route("/book", bookRoutes);
 app.route("/borrow", borrowRoute);
+app.route("/users", statisticsRouter);
+app.route("/library", libraryStatisticsRouter);
+
 
 export default app;

@@ -1,7 +1,6 @@
 import { BookService } from "../services/book.service";
 
 export const BookController = {
-  // GET /books - Get all books
   getAll: async (c: any) => {
     const page = parseInt(c.req.query("page") || "1");
     const limit = parseInt(c.req.query("limit") || "10");
@@ -11,7 +10,6 @@ export const BookController = {
     return c.json(result);
   },
 
-  // GET /books/:id - Get book by ID
   getById: async (c: any) => {
     const id = parseInt(c.req.param("id"));
     
@@ -28,7 +26,6 @@ export const BookController = {
     return c.json(result);
   },
 
-  // POST /books - Create new book (Admin only)
   create: async (c: any) => {
     const fields = await c.req.parseBody();
     const user = c.get("user");
@@ -64,7 +61,6 @@ export const BookController = {
   },
   
   
-  // PUT /books/:id - Update book (Admin only)
   update: async (c: any) => {
     const id = Number(c.req.param("id"));
     if (isNaN(id)) return c.json({ error: "Invalid book ID" }, 400);
@@ -100,7 +96,6 @@ export const BookController = {
     return c.json(result);
   },
 
-  // DELETE /books/:id - Delete book (Admin only)
   delete: async (c: any) => {
     const id = parseInt(c.req.param("id"));
 

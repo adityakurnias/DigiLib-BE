@@ -29,6 +29,27 @@
       "when": 1764085387347,
       "tag": "0003_glorious_havok",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1764124905633,
+      "tag": "0004_breezy_songbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1764126890164,
+      "tag": "0005_majestic_leo",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1764427875188,
+      "tag": "0006_even_ted_forrester",
+      "breakpoints": true
     }
   ]
 }
