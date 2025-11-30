@@ -38,5 +38,6 @@ export const StatisticsController = {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename=report_${start}_${end}.pdf`,
       },
-    })
-};
+    });
+  },
+}
