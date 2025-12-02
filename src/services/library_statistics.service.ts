@@ -5,6 +5,50 @@ import { eq, between, sql, and } from "drizzle-orm";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 
 export const StatisticsService = {
+    getOrCreateToday: async () => {
+    const today = new Date().toISOString().split("T")[0];
+
+    const existing = await db
+      .select()
+      .from(library_statistics)
+      .where(eq(library_statistics.statDate, today))
+      .limit(1);
+
+    if (existing.length > 0) return existing[0];
+
+    const inserted = await db.insert(library_statistics).values({
+      statDate: today,
+      borrowCount: 0,
+      returnCount: 0,
+    });
+
+    const [created] = await db
+      .select()
+      .from(library_statistics)
+      .where(eq(library_statistics.statDate, today));
+
+    return created;
+  },
+
+   incrementBorrow: async () => {
+    const today = await StatisticsService.getOrCreateToday();
+
+    await db.update(library_statistics)
+      .set({
+        borrowCount: sql`${library_statistics.borrowCount} + 1`
+      })
+      .where(eq(library_statistics.id, today.id));
+  },
+
+  incrementReturn: async () => {
+    const today = await StatisticsService.getOrCreateToday();
+
+    await db.update(library_statistics)
+      .set({
+        returnCount: sql`${library_statistics.returnCount} + 1`
+      })
+      .where(eq(library_statistics.id, today.id));
+  },
   getSummary: async () => {
     const borrowed = await db
       .select({ count: sql<number>`COUNT(*)` })

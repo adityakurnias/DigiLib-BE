@@ -2,6 +2,7 @@ import { db } from "../databases";
 import { borrowings } from "../databases/schema/borrowings";
 import { books } from "../databases/schema/books";
 import { eq, and } from "drizzle-orm";
+import { StatisticsService } from "./library_statistics.service";
 
 export const BorrowingService = {
   getAll: async () => {
@@ -66,6 +67,8 @@ export const BorrowingService = {
       .set({ available: book.available - 1 })
       .where(eq(books.id, br.bookId));
 
+    await StatisticsService.incrementBorrow();
+
     return { success: true, message: "Borrow request approved" };
   },
 
@@ -109,6 +112,8 @@ export const BorrowingService = {
     await db.update(books)
       .set({ available: book.available + 1 })
       .where(eq(books.id, br.bookId));
+
+    await StatisticsService.incrementReturn();
 
     return { success: true, message: "Book returned" };
   },
