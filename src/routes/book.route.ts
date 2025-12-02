@@ -11,7 +11,7 @@ bookRoutes.get("/", BookController.getAll);
 bookRoutes.get("/:id", BookController.getById);
 
 bookRoutes.post("/", authMiddleware, adminMiddleware, BookController.create);
-bookRoutes.put("/:id", authMiddleware, adminMiddleware, BookController.update);
+bookRoutes.post("/:id", authMiddleware, adminMiddleware, BookController.update);
 bookRoutes.delete(
   "/:id",
   authMiddleware,

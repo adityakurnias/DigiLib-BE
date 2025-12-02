@@ -39,9 +39,19 @@ export const BorrowingService = {
   },
 
   approveBorrow: async (id: number, librarianId: number) => {
+    const [br] = await db.select().from(borrowings).where(eq(borrowings.id, id));
+    if (!br) return { success: false, message: "Borrowing record not found" };
+
+    const [book] = await db.select().from(books).where(eq(books.id, br.bookId));
+    if (!book) return { success: false, message: "Book not found" };
+
+    if (book.available <= 0) {
+      return { success: false, message: "Book is out of stock" };
+    }
+
     const today = new Date();
     const dueDate = new Date();
-    dueDate.setDate(today.getDate() + 7); // 7 hari peminjaman
+    dueDate.setDate(today.getDate() + 7);
 
     await db.update(borrowings)
       .set({
@@ -52,8 +62,13 @@ export const BorrowingService = {
       })
       .where(eq(borrowings.id, id));
 
+    await db.update(books)
+      .set({ available: book.available - 1 })
+      .where(eq(books.id, br.bookId));
+
     return { success: true, message: "Borrow request approved" };
   },
+
 
   rejectBorrow: async (id: number, reason: string, librarianId: number) => {
     await db.update(borrowings)
@@ -68,21 +83,20 @@ export const BorrowingService = {
   },
 
   returnBook: async (id: number, librarianId: number) => {
-    // Get the borrowing record to find the bookId
-    const borrowingRecord = await db.select().from(borrowings).where(eq(borrowings.id, id));
+    const borrowList = await db.select().from(borrowings).where(eq(borrowings.id, id));
 
-    if (!borrowingRecord.length) {
+    if (!borrowList.length) {
       return { success: false, message: "Borrowing record not found", status: 404 };
     }
 
-    const bookId = borrowingRecord[0].bookId;
+    const br = borrowList[0];
 
-    // Check if the book exists
-    const bookExists = await db.select().from(books).where(eq(books.id, bookId));
-
-    if (!bookExists.length) {
-      return { success: false, message: "Book not found, cannot return", status: 404 };
+    const bookList = await db.select().from(books).where(eq(books.id, br.bookId));
+    if (!bookList.length) {
+      return { success: false, message: "Book not found", status: 404 };
     }
+
+    const book = bookList[0];
 
     await db.update(borrowings)
       .set({
@@ -92,6 +106,11 @@ export const BorrowingService = {
       })
       .where(eq(borrowings.id, id));
 
+    await db.update(books)
+      .set({ available: book.available + 1 })
+      .where(eq(books.id, br.bookId));
+
     return { success: true, message: "Book returned" };
-  }
+  },
+
 };

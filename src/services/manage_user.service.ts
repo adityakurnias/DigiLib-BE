@@ -35,10 +35,17 @@ export const UserService = {
     return { id: result[0].insertId };
   },
 
-  update: async (id: number, data: Partial<{name: string; email: string; role: any;}>) => {
-    await db.update(users).set(data).where(eq(users.id, id));
+  update: async (id: number, data: any) => {
+    const updateData: any = { ...data };
+
+    if (data.password) {
+      updateData.password = await hashPassword(data.password);
+    }
+
+    await db.update(users).set(updateData).where(eq(users.id, id));
     return { message: "User updated" };
   },
+
 
   updatePassword: async (id: number, newPassword: string) => {
     const hashed = await hashPassword(newPassword);
