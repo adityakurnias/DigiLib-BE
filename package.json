@@ -2,7 +2,9 @@
   "name": "digilib",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "seed:admin": "bun run src/seeds/admin.seeder.ts"
+    "seed:admin": "bun run src/seeds/admin.seeder.ts",
+    "seed:categories": "bun run src/seeds/categories.seeder.ts",
+    "seed:books": "bun run src/seeds/books.seeder.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
