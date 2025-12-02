@@ -24,4 +24,13 @@ export const AuthController = {
     const result = await AuthService.login(email, password);
     return c.json(result);
   },
+
+  logout: async (c: any) => {
+    // Since JWT is stateless, logout is handled on client-side by removing the token
+    // This endpoint confirms the logout action
+    return c.json({
+      success: true,
+      message: "User logged out successfully"
+    });
+  },
 };

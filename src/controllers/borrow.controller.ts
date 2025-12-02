@@ -1,20 +1,20 @@
 import { BorrowingService } from "../services/borrow.service";
 
 export const BorrowingController = {
-  
+
   getAll: async (c: any) => {
     const result = await BorrowingService.getAll();
 
     return c.json(result);
   },
-  
+
   getByUser: async (c: any) => {
     const user = c.get("user");
     const result = await BorrowingService.getByUser(user.id);
 
     return c.json(result);
   },
-  
+
   request: async (c: any) => {
     const user = c.get("user");
     const id = parseInt(c.req.param("id"));
@@ -46,6 +46,9 @@ export const BorrowingController = {
     const id = parseInt(c.req.param("id"));
 
     const result = await BorrowingService.returnBook(id, librarian.id);
+    if (result.status) {
+      return c.json(result, result.status);
+    }
     return c.json(result);
   }
 };
